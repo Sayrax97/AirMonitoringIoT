@@ -1,0 +1,26 @@
+{
+  "name": "air_monitoring",
+  "version": "1.0.0",
+  "description": "IoT air monitoring microservice",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sayrax97/AirMonitoringIoT.git"
+  },
+  "author": "Sayrax97,TyrantInShadows",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sayrax97/AirMonitoringIoT/issues"
+  },
+  "homepage": "https://github.com/Sayrax97/AirMonitoringIoT#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "influx": "^5.5.1",
+    "moleculer": "^0.14.7",
+    "nats": "^1.4.9"
+  }
+}
