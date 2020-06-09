@@ -6,15 +6,14 @@ const Influx = require("influx");
 module.exports = {
   name: "data",
   actions: {
-    //TODO
-    readSoilTemperature: {
+    readCO: {
       params: {
         sensorId: { type: "number" }
       },
       async handler(ctx) {
         try {
           const res = await this.influx.query(
-            `select * from soilTemperature where sensorId=${ctx.params.sensorId}`
+            `select * from co where sensorId=${ctx.params.sensorId}`
           );
           return res;
         } catch (err) {
@@ -23,14 +22,14 @@ module.exports = {
         }
       }
     },
-    readAirTemperature: {
+    readNO2: {
       params: {
         sensorId: { type: "number" }
       },
       async handler(ctx) {
         try {
           const res = await this.influx.query(
-            `select * from airTemperature where sensorId=${ctx.params.sensorId}`
+            `select * from no2 where sensorId=${ctx.params.sensorId}`
           );
           return res;
         } catch (err) {
@@ -39,30 +38,14 @@ module.exports = {
         }
       }
     },
-    readRHPercent: {
+    readSO2: {
       params: {
         sensorId: { type: "number" }
       },
       async handler(ctx) {
         try {
           const res = await this.influx.query(
-            `select * from RHpercent where sensorId=${ctx.params.sensorId}`
-          );
-          return res;
-        } catch (err) {
-          console.log(err);
-          return null;
-        }
-      }
-    },
-    readWaterContent: {
-      params: {
-        sensorId: { type: "number" }
-      },
-      async handler(ctx) {
-        try {
-          const res = await this.influx.query(
-            `select * from waterContent where sensorId=${ctx.params.sensorId}`
+            `select * from so2 where sensorId=${ctx.params.sensorId}`
           );
           return res;
         } catch (err) {
@@ -163,7 +146,7 @@ module.exports = {
   created() {
     this.influx = new Influx.InfluxDB({
       host: process.env.INFLUXDB_HOST || "influx",
-      database: process.env.INFLUXDB_DATABASE || "plants",
+      database: process.env.INFLUXDB_DATABASE || "air_emission",
       username: process.env.ADMIN_USER || "admin",
       password: process.env.ADMIN_PASSWORD || "admin",
       schema: [

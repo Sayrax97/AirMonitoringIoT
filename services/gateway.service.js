@@ -10,71 +10,56 @@ module.exports = {
   },
   methods: {
     initRoutes(app) {
-      app.get("/soilTemperature/:id", this.getSoilTemperature);
-      app.get("/airTemperature", this.getAirTemperature);
-      app.get("/RHpercent", this.getRHpercent);
-      app.get("/waterContent", this.getWaterContent);
+      app.get("/co/:id", this.getCO);
+      app.get("/so2/:id", this.getSO2);
+      app.get("/no2/:id", this.getNO2);
       //app.put("/set", this.putData);
     },
-    getSoilTemperature(req, res) {
+    getCO(req, res) {
       const sensorId = req.params.id ? Number(req.paramsquery.id) : 0;
+      if (sensorId == 0) {
+        res.send({ error: "Id not specified" });
+      }
       return Promise.resolve()
         .then(() => {
           return this.broker
-            .call("data.readSoilTemperature", { sensorId: sensorId })
+            .call("data.readCO", { sensorId: sensorId })
             .then(result => {
               res.send(result);
             });
         })
         .catch(this.handleErr(res));
     },
-    getAirTemperature(req, res) {
-      const sensorId = req.query.id ? Number(req.query.id) : 0;
+    getSO2(req, res) {
+      const sensorId = req.params.id ? Number(req.query.id) : 0;
+      if (sensorId == 0) {
+        res.send({ error: "Id not specified" });
+      }
       return Promise.resolve()
         .then(() => {
           return this.broker
-            .call("data.readAirTemperature", { sensorId: sensorId })
+            .call("data.readSO2", { sensorId: sensorId })
             .then(result => {
               res.send(result);
             });
         })
         .catch(this.handleErr(res));
     },
-    getRHpercent(req, res) {
-      const sensorId = req.query.id ? Number(req.query.id) : 0;
+    getNO2(req, res) {
+      const sensorId = req.params.id ? Number(req.query.id) : 0;
+      if (sensorId == 0) {
+        res.send({ error: "Id not specified" });
+      }
       return Promise.resolve()
         .then(() => {
           return this.broker
-            .call("data.readRHPercent", { sensorId: sensorId })
+            .call("data.readNO2", { sensorId: sensorId })
             .then(result => {
               res.send(result);
             });
         })
         .catch(this.handleErr(res));
     },
-    getWaterContent(req, res) {
-      const sensorId = req.query.id ? Number(req.query.id) : 0;
-      return Promise.resolve()
-        .then(() => {
-          return this.broker
-            .call("data.readWaterContent", { sensorId: sensorId })
-            .then(result => {
-              res.send(result);
-            });
-        })
-        .catch(this.handleErr(res));
-    },
-    // putData(req, res) {
-    //     const body = req.body;
-    //     console.log(body);
-    //     return Promise.resolve()
-    //     .then(() => {
-    //         return this.broker.call('actuator.set', body).then(r =>
-    //             res.send(r)
-    //         );
-    //     })
-    //     .catch(this.handleErr(res));
-    // },
     handleErr(res) {
       return err => {
         res.status(err.code || 500).send(err.message);

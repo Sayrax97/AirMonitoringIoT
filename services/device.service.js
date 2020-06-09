@@ -127,7 +127,7 @@ module.exports = {
     this.IndexCO = 0;
     this.IndexSO2 = 0;
     this.IndexNO2 = 0;
-    this.interval = 10000;
+    this.interval = 60000;
     // init
     this.readData();
     this.init();
