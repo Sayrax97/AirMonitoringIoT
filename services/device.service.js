@@ -50,76 +50,108 @@ module.exports = {
     }
   },
   events: {
-    "device.turnAirCleanerOn": {
+    "device.turnCOCleanerOn": {
       group: "other",
       handler(payload) {
-        console.log('Received "turnAirCleanerOn" event: Air cleaner turned ON');
-        this.airCleaner = true;
+        console.log('Received "turnCOCleanerOn" event: CO cleaner turned ON');
+        this.CleanerCO = true;
       }
     },
-    "device.turnAirCleanerOff": {
+    "device.turnCOCleanerOff": {
+      group: "other",
+      handler(payload) {
+        console.log('Received "turnCOCleanerOff" event: CO cleaner turned OFF');
+        this.CleanerCO = false;
+      }
+    },
+    "device.turnSO2CleanerOn": {
+      group: "other",
+      handler(payload) {
+        console.log('Received "turnSO2CleanerOn" event: SO2 cleaner turned ON');
+        this.CleanerSO2 = true;
+      }
+    },
+    "device.turnSO2CleanerOff": {
       group: "other",
       handler(payload) {
         console.log(
-          'Received "turnAirCleanerOff" event: Air cleaner turned OFF'
+          'Received "turnSO2CleanerOff" event: SO2 cleaner turned OFF'
         );
-        this.airCleaner = false;
+        this.CleanerSO2 = false;
       }
     },
-    "device.increaseFactoryPL": {
+    "device.turnNO2CleanerOn": {
+      group: "other",
+      handler(payload) {
+        console.log('Received "turnNO2CleanerOn" event: NO2 cleaner turned ON');
+        this.CleanerNO2 = true;
+      }
+    },
+    "device.turnNO2CleanerOff": {
       group: "other",
       handler(payload) {
         console.log(
-          `Received "increaseFactoryPL" event with payload: ${payload}`
+          'Received "turnNO2CleanerOff" event: NO2 cleaner turned OFF'
         );
-        if (factoryProductionLvl + payload.value <= 100)
-          this.factoryProductionLvl += payload.value;
+        this.CleanerNO2 = false;
+      }
+    },
+    "device.changeCOCleanerLvl": {
+      group: "other",
+      handler(payload) {
+        console.log(
+          `Received "changeCOCleanerLvl" event with payload: ${payload}`
+        );
+        if (payload.value <= 100 && payload.value >= 0)
+          this.CleanerCOLvl = payload.value;
         else {
           console.log(
-            `Factory production level cannot exceed 100%, current: ${this.factoryProductionLvl}`
+            `CO cleaner must be between 0 and 100%, provided: ${payload.value}`
           );
         }
       }
     },
-    "device.decreaseFactoryPL": {
+    "device.changeSO2CleanerLvl": {
       group: "other",
       handler(payload) {
         console.log(
-          `Received "decreaseFactoryPL" event with payload: ${payload}`
+          `Received "changeSO2CleanerLvl" event with payload: ${payload}`
         );
-        if (factoryProductionLvl - payload.value < 0)
-          this.factoryProductionLvl -= payload.value;
+        if (payload.value <= 100 && payload.value >= 0)
+          this.CleanerSO2Lvl = payload.value;
         else {
           console.log(
-            `Factory production level cannot go below 0%, current: ${this.factoryProductionLvl}`
+            `CO cleaner must be between 0 and 100%, provided: ${payload.value}`
           );
         }
       }
     },
-    "device.increaseTrafficLimit": {
+    "device.changeNO2CleanerLvl": {
       group: "other",
       handler(payload) {
         console.log(
-          `Received "increaseTrafficLimit" event with payload: ${payload}`
+          `Received "changeNO2CleanerLvl" event with payload: ${payload}`
         );
-        this.trafficLimit += payload.value;
-      }
-    },
-    "device.decreaseTrafficLimit": {
-      group: "other",
-      handler(payload) {
-        console.log(
-          `Received "decreaseTrafficLimit" event with payload: ${payload}`
-        );
-        this.trafficLimit -= payload.value;
+        if (payload.value <= 100 && payload.value >= 0)
+          this.CleanerNO2Lvl = payload.value;
+        else {
+          console.log(
+            `CO cleaner must be between 0 and 100%, provided: ${payload.value}`
+          );
+        }
       }
     }
   },
   created() {
     // actuator
-    this.airCleaner = false; //air cleaner on/off
-    this.factoryProductionLvl = 75; //Procent of active factories production
-    this.trafficLimit = 100000; //Vehicles on street
+    this.CleanerCO = false; //CO cleaner on/off
+    this.CleanerSO2 = false; //SO2 cleaner on/off
+    this.CleanerNO2 = false; //NO2 cleaner on/off
+
+    this.CleanerCOLvl = 0; //CO cleaner % working
+    this.CleanerSO2Lvl = 0; //SO2 cleaner % working
+    this.CleanerNO2Lvl = 0; //NO2 cleaner % working
+
     this.ECOtax = 1.25; //$ per ppm(parts per million)
     this.AQI_max = 50; //max value of Air Quality Index
     // sensor

@@ -16,7 +16,7 @@ module.exports = {
       //app.put("/set", this.putData);
     },
     getCO(req, res) {
-      const sensorId = req.params.id ? Number(req.paramsquery.id) : 0;
+      const sensorId = req.params.id ? Number(req.params.id) : 0;
       if (sensorId == 0) {
         res.send({ error: "Id not specified" });
       }
@@ -31,7 +31,7 @@ module.exports = {
         .catch(this.handleErr(res));
     },
     getSO2(req, res) {
-      const sensorId = req.params.id ? Number(req.query.id) : 0;
+      const sensorId = req.params.id ? Number(req.params.id) : 0;
       if (sensorId == 0) {
         res.send({ error: "Id not specified" });
       }
@@ -46,7 +46,7 @@ module.exports = {
         .catch(this.handleErr(res));
     },
     getNO2(req, res) {
-      const sensorId = req.params.id ? Number(req.query.id) : 0;
+      const sensorId = req.params.id ? Number(req.params.id) : 0;
       if (sensorId == 0) {
         res.send({ error: "Id not specified" });
       }
