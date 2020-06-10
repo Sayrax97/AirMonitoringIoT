@@ -1,58 +1,79 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using analytics.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using command.Models;
 
-namespace analytics.Controllers
+namespace command.Controllers
 {
     [ApiController]
     [Route("/api/[controller]")]
-    public class AnalysisController : ControllerBase
+    public class CommandController : ControllerBase
     {
         private static readonly int TMax = 35;
-        public AnalysisController()
+        public CommandController()
         {
         }
 
         [HttpGet] 
         public ActionResult<string> Get() {
-            return Ok("Analysis works!");
+             return new ContentResult 
+            {
+                ContentType = "text/html",
+                Content = "<h3>List of commands</h3><ul><li>PUT</li><li>co/cleaner - turn on/off (Switch:bool) and set Level (Lvl:int)</li><li>so2/cleaner- turn on/of f(Switch:bool) and set Level (Lvl:int)</li><li>no2/cleaner- turn on/of f(Switch:bool) and set Level (Lvl:int)</li></ul>"
+            };
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Post(SensorData data)
+        [HttpPost("co/cleaner")]
+        public async Task<IActionResult> PostCoCleaner(Actuator data)
         {
-            int offset = data.Temperature > TMax ? TMax - data.Temperature : 0;
-            if (offset != 0) {
                 using (var httpClient = new HttpClient())
                 {
-                    data.Offset = offset;
                     var c = JsonConvert.SerializeObject(data);
                     StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
-                    using (var response = await httpClient.PutAsync("http://gateway:3000/set", content))
+                    using (var response = await httpClient.PutAsync("http://gateway:3000/co/cleaner", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
-                        return new JsonResult(
-                            new 
-                            {
-                                resp = apiResponse,
-                                message = $"Temperature corrected - {offset}!",
-                            }
-                        );
+                        return  Ok(apiResponse);
                     }
                 }
-            }
-            return new JsonResult(
-                new 
+            
+        }
+        [HttpPost("so2/cleaner")]
+        public async Task<IActionResult> PostSO2Cleaner(Actuator data)
+        {
+                using (var httpClient = new HttpClient())
                 {
-                    message = "Temperature OK!"
+                    var c = JsonConvert.SerializeObject(data);
+                    StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
+                    using (var response = await httpClient.PutAsync("http://gateway:3000/so2/cleaner", content))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        return  Ok(apiResponse);
+                    }
                 }
-            );
+            
+        }
+        [HttpPost("no2/cleaner")]
+        public async Task<IActionResult> PostNO2Cleaner(Actuator data)
+        {
+                using (var httpClient = new HttpClient())
+                {
+                    var c = JsonConvert.SerializeObject(data);
+                    StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
+                    using (var response = await httpClient.PutAsync("http://gateway:3000/no2/cleaner", content))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        return  Ok(apiResponse);
+                    }
+                }
+            
         }
     }
 }

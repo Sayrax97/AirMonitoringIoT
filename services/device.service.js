@@ -100,13 +100,17 @@ module.exports = {
       group: "other",
       handler(payload) {
         console.log(
-          `Received "changeCOCleanerLvl" event with payload: ${payload}`
+          `Received "changeCOCleanerLvl" event with payload: ${JSON.stringify(
+            payload
+          )}`
         );
-        if (payload.value <= 100 && payload.value >= 0)
-          this.CleanerCOLvl = payload.value;
-        else {
+        if (payload.Lvl <= 100 && payload.Lvl >= 0) {
+          this.CleanerCOLvl = payload.Lvl;
+          console.log(this.CleanerCOLvl);
+          console.log(this.CleanerCO);
+        } else {
           console.log(
-            `CO cleaner must be between 0 and 100%, provided: ${payload.value}`
+            `CO cleaner must be between 0 and 100%, provided: ${payload.Lvl}`
           );
         }
       }
@@ -115,13 +119,15 @@ module.exports = {
       group: "other",
       handler(payload) {
         console.log(
-          `Received "changeSO2CleanerLvl" event with payload: ${payload}`
+          `Received "changeSO2CleanerLvl" event with payload: ${JSON.stringify(
+            payload
+          )}`
         );
-        if (payload.value <= 100 && payload.value >= 0)
-          this.CleanerSO2Lvl = payload.value;
+        if (payload.Lvl <= 100 && payload.Lvl >= 0)
+          this.CleanerSO2Lvl = payload.Lvl;
         else {
           console.log(
-            `CO cleaner must be between 0 and 100%, provided: ${payload.value}`
+            `CO cleaner must be between 0 and 100%, provided: ${payload.Lvl}`
           );
         }
       }
@@ -130,13 +136,15 @@ module.exports = {
       group: "other",
       handler(payload) {
         console.log(
-          `Received "changeNO2CleanerLvl" event with payload: ${payload}`
+          `Received "changeNO2CleanerLvl" event with payload: ${JSON.stringify(
+            payload
+          )}`
         );
-        if (payload.value <= 100 && payload.value >= 0)
-          this.CleanerNO2Lvl = payload.value;
+        if (payload.Lvl <= 100 && payload.Lvl >= 0)
+          this.CleanerNO2Lvl = payload.Lvl;
         else {
           console.log(
-            `CO cleaner must be between 0 and 100%, provided: ${payload.value}`
+            `CO cleaner must be between 0 and 100%, provided: ${payload.Lvl}`
           );
         }
       }

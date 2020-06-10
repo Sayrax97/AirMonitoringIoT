@@ -13,6 +13,9 @@ module.exports = {
       app.get("/co/:id", this.getCO);
       app.get("/so2/:id", this.getSO2);
       app.get("/no2/:id", this.getNO2);
+      app.put("/co/cleaner", this.CleanerCO);
+      app.put("/so2/cleaner", this.CleanerSO2);
+      app.put("/no2/cleaner", this.CleanerNO2);
       //app.put("/set", this.putData);
     },
     getCO(req, res) {
@@ -59,6 +62,30 @@ module.exports = {
             });
         })
         .catch(this.handleErr(res));
+    },
+    CleanerCO(req, res) {
+      let data = req.body;
+      console.log("Data je: " + data.Switch + data.Lvl);
+      if (data.Switch) this.broker.emit("device.turnCOCleanerOn");
+      else this.broker.emit("device.turnCOCleanerOff");
+      this.broker.emit("device.changeCOCleanerLvl", data);
+      res.send({ message: "successfull" });
+    },
+    CleanerSO2(req, res) {
+      let data = req.body;
+      console.log("Data je: " + data.Switch + data.Lvl);
+      if (data.Switch) this.broker.emit("device.turnSO2CleanerOn");
+      else this.broker.emit("device.turnSO2CleanerOff");
+      this.broker.emit("device.changeSO2CleanerLvl", data);
+      res.send({ message: "successfull" });
+    },
+    CleanerNO2(req, res) {
+      let data = req.body;
+      console.log("Data je: " + data.Switch + data.Lvl);
+      if (data.Switch) this.broker.emit("device.turnNO2CleanerOn");
+      else this.broker.emit("device.turnNO2CleanerOff");
+      this.broker.emit("device.changeNO2CleanerLvl", data);
+      res.send({ message: "successfull" });
     },
     handleErr(res) {
       return err => {
