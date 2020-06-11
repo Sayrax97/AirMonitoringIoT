@@ -27,7 +27,7 @@ module.exports = {
           SO2_Con: recordSO2.SO2_Con,
           SO2_AQI: recordSO2.AQI_VALUE,
           SO2_AQS_Name: recordSO2.AQS_PARAMETER_DESC,
-          Time: Date.now()
+          Time: Date.now(),
         });
       }, this.interval);
     },
@@ -47,7 +47,7 @@ module.exports = {
         this.dataSO2 = JSON.parse(data);
         console.log(this.dataSO2.length);
       });
-    }
+    },
   },
   events: {
     "device.turnCOCleanerOn": {
@@ -55,21 +55,21 @@ module.exports = {
       handler(payload) {
         console.log('Received "turnCOCleanerOn" event: CO cleaner turned ON');
         this.CleanerCO = true;
-      }
+      },
     },
     "device.turnCOCleanerOff": {
       group: "other",
       handler(payload) {
         console.log('Received "turnCOCleanerOff" event: CO cleaner turned OFF');
         this.CleanerCO = false;
-      }
+      },
     },
     "device.turnSO2CleanerOn": {
       group: "other",
       handler(payload) {
         console.log('Received "turnSO2CleanerOn" event: SO2 cleaner turned ON');
         this.CleanerSO2 = true;
-      }
+      },
     },
     "device.turnSO2CleanerOff": {
       group: "other",
@@ -78,14 +78,14 @@ module.exports = {
           'Received "turnSO2CleanerOff" event: SO2 cleaner turned OFF'
         );
         this.CleanerSO2 = false;
-      }
+      },
     },
     "device.turnNO2CleanerOn": {
       group: "other",
       handler(payload) {
         console.log('Received "turnNO2CleanerOn" event: NO2 cleaner turned ON');
         this.CleanerNO2 = true;
-      }
+      },
     },
     "device.turnNO2CleanerOff": {
       group: "other",
@@ -94,7 +94,7 @@ module.exports = {
           'Received "turnNO2CleanerOff" event: NO2 cleaner turned OFF'
         );
         this.CleanerNO2 = false;
-      }
+      },
     },
     "device.changeCOCleanerLvl": {
       group: "other",
@@ -113,7 +113,7 @@ module.exports = {
             `CO cleaner must be between 0 and 100%, provided: ${payload.Lvl}`
           );
         }
-      }
+      },
     },
     "device.changeSO2CleanerLvl": {
       group: "other",
@@ -130,7 +130,7 @@ module.exports = {
             `CO cleaner must be between 0 and 100%, provided: ${payload.Lvl}`
           );
         }
-      }
+      },
     },
     "device.changeNO2CleanerLvl": {
       group: "other",
@@ -147,8 +147,8 @@ module.exports = {
             `CO cleaner must be between 0 and 100%, provided: ${payload.Lvl}`
           );
         }
-      }
-    }
+      },
+    },
   },
   created() {
     // actuator
@@ -171,5 +171,5 @@ module.exports = {
     // init
     this.readData();
     this.init();
-  }
+  },
 };
