@@ -30,8 +30,8 @@ namespace command.Controllers
             };
         }
 
-        [HttpPost("co/cleaner")]
-        public async Task<IActionResult> PostCoCleaner(Actuator data)
+        [HttpPut("co/cleaner")]
+        public async Task<IActionResult> PutCoCleaner(Actuator data)
         {
                 using (var httpClient = new HttpClient())
                 {
@@ -45,8 +45,8 @@ namespace command.Controllers
                 }
             
         }
-        [HttpPost("so2/cleaner")]
-        public async Task<IActionResult> PostSO2Cleaner(Actuator data)
+        [HttpPut("so2/cleaner")]
+        public async Task<IActionResult> PutSO2Cleaner(Actuator data)
         {
                 using (var httpClient = new HttpClient())
                 {
@@ -60,8 +60,8 @@ namespace command.Controllers
                 }
             
         }
-        [HttpPost("no2/cleaner")]
-        public async Task<IActionResult> PostNO2Cleaner(Actuator data)
+        [HttpPut("no2/cleaner")]
+        public async Task<IActionResult> PutNO2Cleaner(Actuator data)
         {
                 using (var httpClient = new HttpClient())
                 {
