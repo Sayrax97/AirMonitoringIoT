@@ -37,10 +37,13 @@ namespace analytics.Controllers
                 {
                     Actuator actuator = new Actuator();
                     actuator.Switch = true;
-                    actuator.Lvl = (data.CO_Con - COMaxCon) / COMaxCon * 100 + 1;
+                    double x = (data.CO_Con - COMaxCon) / COMaxCon * 100 + 1;
+                    if (x > 100)
+                        x = 100;
+                    actuator.Lvl = x;
                     var c = JsonConvert.SerializeObject(actuator);
                     StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
-                    using (var response = await httpClient.PutAsync("http://command/api/Command/co/cleaner", content))
+                    using (var response = await httpClient.PutAsync("http://command/api/command/co/cleaner", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
                         System.Console.WriteLine("Too much air pollution");
@@ -56,7 +59,7 @@ namespace analytics.Controllers
                     actuator.Lvl = 0;
                     var c = JsonConvert.SerializeObject(actuator);
                     StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
-                    using (var response = await httpClient.PutAsync("http://command/api/Command/co/cleaner", content))
+                    using (var response = await httpClient.PutAsync("http://command/api/command/co/cleaner", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
                         System.Console.WriteLine("Air pollution not dangerous");
@@ -69,10 +72,13 @@ namespace analytics.Controllers
                 {
                     Actuator actuator = new Actuator();
                     actuator.Switch = true;
-                    actuator.Lvl = (data.SO2_Con - SO2MaxCon) / SO2MaxCon * 100 + 1;
+                    double x = (data.SO2_Con - SO2MaxCon) / SO2MaxCon * 100 + 1;
+                    if (x > 100)
+                        x = 100;
+                    actuator.Lvl = x;
                     var c = JsonConvert.SerializeObject(actuator);
                     StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
-                    using (var response = await httpClient.PutAsync("http://command/api/Command/so2/cleaner", content))
+                    using (var response = await httpClient.PutAsync("http://command/api/command/so2/cleaner", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
                         System.Console.WriteLine("Too much air pollution");
@@ -88,7 +94,7 @@ namespace analytics.Controllers
                     actuator.Lvl = 0;
                     var c = JsonConvert.SerializeObject(actuator);
                     StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
-                    using (var response = await httpClient.PutAsync("http://command/api/Command/so2/cleaner", content))
+                    using (var response = await httpClient.PutAsync("http://command/api/command/so2/cleaner", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
                         System.Console.WriteLine("Air pollution not dangerous");
@@ -101,10 +107,13 @@ namespace analytics.Controllers
                 {
                     Actuator actuator = new Actuator();
                     actuator.Switch = true;
-                    actuator.Lvl = (data.NO2_Con - NO2MaxCon) / NO2MaxCon * 100 + 1;
+                    double x = (data.NO2_Con - NO2MaxCon) / NO2MaxCon * 100 + 1;
+                    if (x > 100)
+                        x = 100;
+                    actuator.Lvl = x;
                     var c = JsonConvert.SerializeObject(actuator);
                     StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
-                    using (var response = await httpClient.PutAsync("http://command/api/Command/no2/cleaner", content))
+                    using (var response = await httpClient.PutAsync("http://command/api/command/no2/cleaner", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
                         System.Console.WriteLine("Too much air pollution");
@@ -120,7 +129,7 @@ namespace analytics.Controllers
                     actuator.Lvl = 0;
                     var c = JsonConvert.SerializeObject(actuator);
                     StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
-                    using (var response = await httpClient.PutAsync("http://command/api/Command/no2/cleaner", content))
+                    using (var response = await httpClient.PutAsync("http://command/api/command/no2/cleaner", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
                         System.Console.WriteLine("Air pollution not dangerous");
@@ -133,10 +142,13 @@ namespace analytics.Controllers
                 {
                     Actuator actuator = new Actuator();
                     actuator.Switch = true;
-                    actuator.Lvl = (data.CO_AQI + data.SO2_AQI + data.NO2_AQI - AQIMax) / AQIMax * 100 + 1;
+                    double x = (data.CO_AQI + data.SO2_AQI + data.NO2_AQI - AQIMax) / AQIMax * 100 + 1;
+                    if (x > 100)
+                        x = 100;
+                    actuator.Lvl = x;
                     var c = JsonConvert.SerializeObject(actuator);
                     StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
-                    using (var response = await httpClient.PutAsync("http://command/api/Command/cleaner/all", content))
+                    using (var response = await httpClient.PutAsync("http://command/api/command/cleaner/all", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
                         System.Console.WriteLine("Too much air pollution");
