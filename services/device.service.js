@@ -129,15 +129,7 @@ module.exports = {
             payload
           )}`
         );
-        if (payload.Lvl <= 100 && payload.Lvl >= 0) {
-          this.CleanerCOLvl = payload.Lvl;
-          console.log(this.CleanerCOLvl);
-          console.log(this.CleanerCO);
-        } else {
-          console.log(
-            `CO cleaner must be between 0 and 100%, provided: ${payload.Lvl}`
-          );
-        }
+        this.CleanerCOLvl = payload.Lvl;
       }
     },
     "device.changeSO2CleanerLvl": {
@@ -148,13 +140,7 @@ module.exports = {
             payload
           )}`
         );
-        if (payload.Lvl <= 100 && payload.Lvl >= 0)
-          this.CleanerSO2Lvl = payload.Lvl;
-        else {
-          console.log(
-            `CO cleaner must be between 0 and 100%, provided: ${payload.Lvl}`
-          );
-        }
+        this.CleanerSO2Lvl = payload.Lvl;
       }
     },
     "device.changeNO2CleanerLvl": {
@@ -165,13 +151,7 @@ module.exports = {
             payload
           )}`
         );
-        if (payload.Lvl <= 100 && payload.Lvl >= 0)
-          this.CleanerNO2Lvl = payload.Lvl;
-        else {
-          console.log(
-            `CO cleaner must be between 0 and 100%, provided: ${payload.Lvl}`
-          );
-        }
+        this.CleanerNO2Lvl = payload.Lvl;
       }
     }
   },
@@ -185,8 +165,6 @@ module.exports = {
     this.CleanerSO2Lvl = 0; //SO2 cleaner % working
     this.CleanerNO2Lvl = 0; //NO2 cleaner % working
 
-    this.ECOtax = 1.25; //$ per ppm(parts per million)
-    this.AQI_max = 50; //max value of Air Quality Index
     // sensor
     this.sensorId = 1;
     this.IndexCO = 0;

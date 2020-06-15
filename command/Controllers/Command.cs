@@ -34,6 +34,7 @@ namespace command.Controllers
         [HttpPut("co/cleaner")]
         public async Task<IActionResult> PutCoCleaner(Actuator data)
         {
+            Console.WriteLine(JsonConvert.SerializeObject(data));
                 using (var httpClient = new HttpClient())
                 {
                 Sw sw = new Sw()
@@ -68,16 +69,17 @@ namespace command.Controllers
         {
                 using (var httpClient = new HttpClient())
                 {
-                Sw sw = new Sw()
-                {
-                    Switch = data.Switch
-                };
-                    var c = JsonConvert.SerializeObject(sw);
-                    StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
-                    using (var response = await httpClient.PutAsync("http://gateway:3000/so2/cleaner", content))
+                    Console.WriteLine(JsonConvert.SerializeObject(data));
+                    Sw sw = new Sw()
                     {
-                        string response1 = await response.Content.ReadAsStringAsync();
-                    }
+                        Switch = data.Switch
+                    };
+                        var c = JsonConvert.SerializeObject(sw);
+                        StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
+                        using (var response = await httpClient.PutAsync("http://gateway:3000/so2/cleaner", content))
+                        {
+                            string response1 = await response.Content.ReadAsStringAsync();
+                        }
                 }
                 using (var httpClient = new HttpClient())
                 {
@@ -122,6 +124,21 @@ namespace command.Controllers
                     using (var response = await httpClient.PutAsync("http://gateway:3000/no2/cleaner/lvl", content))
                     {
                         string response2 = await response.Content.ReadAsStringAsync();
+                    }
+                }
+                return Ok();
+            
+        }
+        [HttpPut("cleaner/all")]
+        public async Task<IActionResult> CleanerAll(Actuator data)
+        {
+                using (var httpClient = new HttpClient())
+                {
+                    var c = JsonConvert.SerializeObject(data);
+                    StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
+                    using (var response = await httpClient.PutAsync("http://gateway:3000/cleaner/all", content))
+                    {
+                        string response1 = await response.Content.ReadAsStringAsync();
                     }
                 }
                 return Ok();

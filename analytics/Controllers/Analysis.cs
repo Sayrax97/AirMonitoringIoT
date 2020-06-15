@@ -31,6 +31,7 @@ namespace analytics.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(SensorData data)
         {
+            #region COcon
             if (data.CO_Con >= COMaxCon)
             {
                 using (var httpClient = new HttpClient())
@@ -40,10 +41,10 @@ namespace analytics.Controllers
                     actuator.Lvl = (data.CO_Con - COMaxCon) / COMaxCon * 100 + 1;
                     var c = JsonConvert.SerializeObject(actuator);
                     StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
+                    System.Console.WriteLine("Too much CO in air");
                     using (var response = await httpClient.PutAsync("http://command/api/Command/co/cleaner", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
-                        System.Console.WriteLine("Too much air pollution");
                     }
                 }
             }
@@ -56,13 +57,16 @@ namespace analytics.Controllers
                     actuator.Lvl = 0;
                     var c = JsonConvert.SerializeObject(actuator);
                     StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
+                        System.Console.WriteLine("Air pollution not dangerous");
                     using (var response = await httpClient.PutAsync("http://command/api/Command/co/cleaner", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
-                        System.Console.WriteLine("Air pollution not dangerous");
                     }
                 }
             }
+            #endregion
+
+            #region SO2Con
             if (data.SO2_Con >= SO2MaxCon)
             {
                 using (var httpClient = new HttpClient())
@@ -72,10 +76,10 @@ namespace analytics.Controllers
                     actuator.Lvl = (data.SO2_Con - SO2MaxCon) / SO2MaxCon * 100 + 1;
                     var c = JsonConvert.SerializeObject(actuator);
                     StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
+                    System.Console.WriteLine("Too much SO2 in air");
                     using (var response = await httpClient.PutAsync("http://command/api/Command/so2/cleaner", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
-                        System.Console.WriteLine("Too much air pollution");
                     }
                 }
             }
@@ -88,13 +92,16 @@ namespace analytics.Controllers
                     actuator.Lvl = 0;
                     var c = JsonConvert.SerializeObject(actuator);
                     StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
+                        System.Console.WriteLine("Air pollution not dangerous");
                     using (var response = await httpClient.PutAsync("http://command/api/Command/so2/cleaner", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
-                        System.Console.WriteLine("Air pollution not dangerous");
                     }
                 }
             }
+            #endregion
+
+            #region NO2Con
             if (data.NO2_Con >= NO2MaxCon)
             {
                 using (var httpClient = new HttpClient())
@@ -104,10 +111,10 @@ namespace analytics.Controllers
                     actuator.Lvl = (data.NO2_Con - NO2MaxCon) / NO2MaxCon * 100 + 1;
                     var c = JsonConvert.SerializeObject(actuator);
                     StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
+                    System.Console.WriteLine("Too much NO2 in air");
                     using (var response = await httpClient.PutAsync("http://command/api/Command/no2/cleaner", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
-                        System.Console.WriteLine("Too much air pollution");
                     }
                 }
             }
@@ -120,13 +127,15 @@ namespace analytics.Controllers
                     actuator.Lvl = 0;
                     var c = JsonConvert.SerializeObject(actuator);
                     StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
+                        System.Console.WriteLine("Air pollution not dangerous");
                     using (var response = await httpClient.PutAsync("http://command/api/Command/no2/cleaner", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
-                        System.Console.WriteLine("Air pollution not dangerous");
                     }
                 }
             }
+            #endregion
+            
             if (data.CO_AQI + data.SO2_AQI + data.NO2_AQI >= AQIMax)
             {
                 using (var httpClient = new HttpClient())
@@ -136,10 +145,10 @@ namespace analytics.Controllers
                     actuator.Lvl = (data.CO_AQI + data.SO2_AQI + data.NO2_AQI - AQIMax) / AQIMax * 100 + 1;
                     var c = JsonConvert.SerializeObject(actuator);
                     StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
+                    System.Console.WriteLine("Too much air pollution AQI is high");
                     using (var response = await httpClient.PutAsync("http://command/api/Command/cleaner/all", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
-                        System.Console.WriteLine("Too much air pollution");
                     }
                 }
             }

@@ -97,9 +97,6 @@ module.exports = {
     },
     CleanerCOLvl(req, res) {
       let data = req.body;
-      console.log("uso je ovde");
-      console.log(`data je ${JSON.stringify(data)}`);
-
       this.broker.emit("device.changeCOCleanerLvl", data);
       res.send({ message: "successfull" });
     },
@@ -115,6 +112,9 @@ module.exports = {
     },
     CleanerAll(req, res) {
       let data = req.body;
+      this.broker.emit("device.turnCOCleanerOn");
+      this.broker.emit("device.turnSO2CleanerOn");
+      this.broker.emit("device.turnNO2CleanerOn");
       this.broker.emit("device.changeNO2CleanerLvl", data);
       this.broker.emit("device.changeSO2CleanerLvl", data);
       this.broker.emit("device.changeCOCleanerLvl", data);
