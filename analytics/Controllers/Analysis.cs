@@ -14,43 +14,139 @@ namespace analytics.Controllers
     [Route("/api/[controller]")]
     public class AnalysisController : ControllerBase
     {
-        private static readonly int TMax = 35;
+        private static readonly double COMaxCon = 0.8;
+        private static readonly double NO2MaxCon = 40;
+        private static readonly double SO2MaxCon = 2;
+        private static readonly double AQIMax = 40;
         public AnalysisController()
         {
         }
 
-        [HttpGet] 
-        public ActionResult<string> Get() {
+        [HttpGet]
+        public ActionResult<string> Get()
+        {
             return Ok("Analysis works!");
         }
 
         [HttpPost]
         public async Task<IActionResult> Post(SensorData data)
         {
-            int offset = data.Temperature > TMax ? TMax - data.Temperature : 0;
-            if (offset != 0) {
+            if (data.CO_Con >= COMaxCon)
+            {
                 using (var httpClient = new HttpClient())
                 {
-                    data.Offset = offset;
-                    var c = JsonConvert.SerializeObject(data);
+                    Actuator actuator = new Actuator();
+                    actuator.Switch = true;
+                    actuator.Lvl = (data.CO_Con - COMaxCon) / COMaxCon * 100 + 1;
+                    var c = JsonConvert.SerializeObject(actuator);
                     StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
-                    using (var response = await httpClient.PutAsync("http://gateway:3000/set", content))
+                    using (var response = await httpClient.PutAsync("http://command/api/Command/co/cleaner", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
-                        return new JsonResult(
-                            new 
-                            {
-                                resp = apiResponse,
-                                message = $"Temperature corrected - {offset}!",
-                            }
-                        );
+                        System.Console.WriteLine("Too much air pollution");
+                    }
+                }
+            }
+            else
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    Actuator actuator = new Actuator();
+                    actuator.Switch = false;
+                    actuator.Lvl = 0;
+                    var c = JsonConvert.SerializeObject(actuator);
+                    StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
+                    using (var response = await httpClient.PutAsync("http://command/api/Command/co/cleaner", content))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        System.Console.WriteLine("Air pollution not dangerous");
+                    }
+                }
+            }
+            if (data.SO2_Con >= SO2MaxCon)
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    Actuator actuator = new Actuator();
+                    actuator.Switch = true;
+                    actuator.Lvl = (data.SO2_Con - SO2MaxCon) / SO2MaxCon * 100 + 1;
+                    var c = JsonConvert.SerializeObject(actuator);
+                    StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
+                    using (var response = await httpClient.PutAsync("http://command/api/Command/so2/cleaner", content))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        System.Console.WriteLine("Too much air pollution");
+                    }
+                }
+            }
+            else
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    Actuator actuator = new Actuator();
+                    actuator.Switch = false;
+                    actuator.Lvl = 0;
+                    var c = JsonConvert.SerializeObject(actuator);
+                    StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
+                    using (var response = await httpClient.PutAsync("http://command/api/Command/so2/cleaner", content))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        System.Console.WriteLine("Air pollution not dangerous");
+                    }
+                }
+            }
+            if (data.NO2_Con >= NO2MaxCon)
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    Actuator actuator = new Actuator();
+                    actuator.Switch = true;
+                    actuator.Lvl = (data.NO2_Con - NO2MaxCon) / NO2MaxCon * 100 + 1;
+                    var c = JsonConvert.SerializeObject(actuator);
+                    StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
+                    using (var response = await httpClient.PutAsync("http://command/api/Command/no2/cleaner", content))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        System.Console.WriteLine("Too much air pollution");
+                    }
+                }
+            }
+            else
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    Actuator actuator = new Actuator();
+                    actuator.Switch = false;
+                    actuator.Lvl = 0;
+                    var c = JsonConvert.SerializeObject(actuator);
+                    StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
+                    using (var response = await httpClient.PutAsync("http://command/api/Command/no2/cleaner", content))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        System.Console.WriteLine("Air pollution not dangerous");
+                    }
+                }
+            }
+            if (data.CO_AQI + data.SO2_AQI + data.NO2_AQI >= AQIMax)
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    Actuator actuator = new Actuator();
+                    actuator.Switch = true;
+                    actuator.Lvl = (data.CO_AQI + data.SO2_AQI + data.NO2_AQI - AQIMax) / AQIMax * 100 + 1;
+                    var c = JsonConvert.SerializeObject(actuator);
+                    StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
+                    using (var response = await httpClient.PutAsync("http://command/api/Command/cleaner/all", content))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        System.Console.WriteLine("Too much air pollution");
                     }
                 }
             }
             return new JsonResult(
-                new 
+                new
                 {
-                    message = "Temperature OK!"
+                    message = "Air pollution cleaner modifid"
                 }
             );
         }
