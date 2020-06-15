@@ -10,13 +10,27 @@ module.exports = {
   },
   methods: {
     initRoutes(app) {
+      app.get("/stats", this.getStats);
       app.get("/co/:id", this.getCO);
       app.get("/so2/:id", this.getSO2);
       app.get("/no2/:id", this.getNO2);
       app.put("/co/cleaner", this.CleanerCO);
       app.put("/so2/cleaner", this.CleanerSO2);
       app.put("/no2/cleaner", this.CleanerNO2);
-      //app.put("/set", this.putData);
+      app.put("/co/cleaner/lvl", this.CleanerCOLvl);
+      app.put("/so2/cleaner/lvl", this.CleanerSO2Lvl);
+      app.put("/no2/cleaner/lvl", this.CleanerNO2Lvl);
+      app.put("/cleaner/all", this.CleanerAll);
+    },
+    getStats(req, res) {
+      return Promise.resolve()
+        .then(() => {
+          return this.broker.call("device.getStats").then(result => {
+            console.log(result);
+            res.send(result);
+          });
+        })
+        .catch(this.handleErr(res));
     },
     getCO(req, res) {
       const sensorId = req.params.id ? Number(req.params.id) : 0;
@@ -65,26 +79,45 @@ module.exports = {
     },
     CleanerCO(req, res) {
       let data = req.body;
-      console.log("Data je: " + data.Switch + data.Lvl);
       if (data.Switch) this.broker.emit("device.turnCOCleanerOn");
       else this.broker.emit("device.turnCOCleanerOff");
-      this.broker.emit("device.changeCOCleanerLvl", data);
       res.send({ message: "successfull" });
     },
     CleanerSO2(req, res) {
       let data = req.body;
-      console.log("Data je: " + data.Switch + data.Lvl);
       if (data.Switch) this.broker.emit("device.turnSO2CleanerOn");
       else this.broker.emit("device.turnSO2CleanerOff");
-      this.broker.emit("device.changeSO2CleanerLvl", data);
       res.send({ message: "successfull" });
     },
     CleanerNO2(req, res) {
       let data = req.body;
-      console.log("Data je: " + data.Switch + data.Lvl);
       if (data.Switch) this.broker.emit("device.turnNO2CleanerOn");
       else this.broker.emit("device.turnNO2CleanerOff");
+      res.send({ message: "successfull" });
+    },
+    CleanerCOLvl(req, res) {
+      let data = req.body;
+      console.log("uso je ovde");
+      console.log(`data je ${JSON.stringify(data)}`);
+
+      this.broker.emit("device.changeCOCleanerLvl", data);
+      res.send({ message: "successfull" });
+    },
+    CleanerSO2Lvl(req, res) {
+      let data = req.body;
+      this.broker.emit("device.changeSO2CleanerLvl", data);
+      res.send({ message: "successfull" });
+    },
+    CleanerNO2Lvl(req, res) {
+      let data = req.body;
       this.broker.emit("device.changeNO2CleanerLvl", data);
+      res.send({ message: "successfull" });
+    },
+    CleanerAll(req, res) {
+      let data = req.body;
+      this.broker.emit("device.changeNO2CleanerLvl", data);
+      this.broker.emit("device.changeSO2CleanerLvl", data);
+      this.broker.emit("device.changeCOCleanerLvl", data);
       res.send({ message: "successfull" });
     },
     handleErr(res) {

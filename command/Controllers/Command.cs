@@ -9,6 +9,7 @@ using analytics.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using command.Models;
+using System.Text.Json.Serialization;
 
 namespace command.Controllers
 {
@@ -35,14 +36,31 @@ namespace command.Controllers
         {
                 using (var httpClient = new HttpClient())
                 {
-                    var c = JsonConvert.SerializeObject(data);
+                Sw sw = new Sw()
+                {
+                    Switch = data.Switch
+                };
+                    var c = JsonConvert.SerializeObject(sw);
                     StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
                     using (var response = await httpClient.PutAsync("http://gateway:3000/co/cleaner", content))
                     {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        return  Ok(apiResponse);
+                        string response1 = await response.Content.ReadAsStringAsync();
                     }
                 }
+                using (var httpClient = new HttpClient())
+                {
+                Level lv = new Level()
+                {
+                    Lvl = data.Lvl
+                };
+                    var c = JsonConvert.SerializeObject(lv);
+                    StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
+                    using (var response = await httpClient.PutAsync("http://gateway:3000/co/cleaner/lvl", content))
+                    {
+                        string response2 = await response.Content.ReadAsStringAsync();
+                    }
+                }
+                return Ok();
             
         }
         [HttpPut("so2/cleaner")]
@@ -50,14 +68,31 @@ namespace command.Controllers
         {
                 using (var httpClient = new HttpClient())
                 {
-                    var c = JsonConvert.SerializeObject(data);
+                Sw sw = new Sw()
+                {
+                    Switch = data.Switch
+                };
+                    var c = JsonConvert.SerializeObject(sw);
                     StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
                     using (var response = await httpClient.PutAsync("http://gateway:3000/so2/cleaner", content))
                     {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        return  Ok(apiResponse);
+                        string response1 = await response.Content.ReadAsStringAsync();
                     }
                 }
+                using (var httpClient = new HttpClient())
+                {
+                Level lv = new Level()
+                {
+                    Lvl = data.Lvl
+                };
+                    var c = JsonConvert.SerializeObject(lv);
+                    StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
+                    using (var response = await httpClient.PutAsync("http://gateway:3000/so2/cleaner/lvl", content))
+                    {
+                        string response2 = await response.Content.ReadAsStringAsync();
+                    }
+                }
+                return Ok();
             
         }
         [HttpPut("no2/cleaner")]
@@ -65,14 +100,31 @@ namespace command.Controllers
         {
                 using (var httpClient = new HttpClient())
                 {
-                    var c = JsonConvert.SerializeObject(data);
+                Sw sw = new Sw()
+                {
+                    Switch = data.Switch
+                };
+                    var c = JsonConvert.SerializeObject(sw);
                     StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
                     using (var response = await httpClient.PutAsync("http://gateway:3000/no2/cleaner", content))
                     {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        return  Ok(apiResponse);
+                        string response1 = await response.Content.ReadAsStringAsync();
                     }
                 }
+                using (var httpClient = new HttpClient())
+                {
+                Level lv = new Level()
+                {
+                    Lvl = data.Lvl
+                };
+                    var c = JsonConvert.SerializeObject(lv);
+                    StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
+                    using (var response = await httpClient.PutAsync("http://gateway:3000/no2/cleaner/lvl", content))
+                    {
+                        string response2 = await response.Content.ReadAsStringAsync();
+                    }
+                }
+                return Ok();
             
         }
     }

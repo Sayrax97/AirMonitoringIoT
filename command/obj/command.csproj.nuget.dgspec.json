@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\IoT\\Monitoring plants\\command\\command.csproj": {}
+    "C:\\Users\\MICE\\Documents\\GitHub\\AirMonitoringIoT\\command\\command.csproj": {}
   },
   "projects": {
-    "C:\\IoT\\Monitoring plants\\command\\command.csproj": {
+    "C:\\Users\\MICE\\Documents\\GitHub\\AirMonitoringIoT\\command\\command.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\IoT\\Monitoring plants\\command\\command.csproj",
+        "projectUniqueName": "C:\\Users\\MICE\\Documents\\GitHub\\AirMonitoringIoT\\command\\command.csproj",
         "projectName": "command",
-        "projectPath": "C:\\IoT\\Monitoring plants\\command\\command.csproj",
-        "packagesPath": "C:\\Users\\DJ\\.nuget\\packages\\",
-        "outputPath": "C:\\IoT\\Monitoring plants\\command\\obj\\",
+        "projectPath": "C:\\Users\\MICE\\Documents\\GitHub\\AirMonitoringIoT\\command\\command.csproj",
+        "packagesPath": "C:\\Users\\MICE\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\MICE\\Documents\\GitHub\\AirMonitoringIoT\\command\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\DJ\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\MICE\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -40,7 +40,7 @@
           "dependencies": {
             "Newtonsoft.Json": {
               "target": "Package",
-              "version": "[*, )"
+              "version": "[12.0.3, )"
             }
           },
           "imports": [
@@ -53,12 +53,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[3.1.2, 3.1.2]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -67,7 +61,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.200\\RuntimeIdentifierGraph.json"
         }
       }
     }

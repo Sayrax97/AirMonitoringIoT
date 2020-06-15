@@ -1,11 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "yaRCYjvVNvUER8qmGB5CcYkatKcOIStcxPC1WstWlOuzuLFl2EseD7S6fmeDBDwKlOZ77iUPoUwz+PEfH6XI3A==",
+  "dgSpecHash": "y4wID+GO5t5Dw7xjas4PC2VZoAVG7+0eNetgZ46wYqxEJXJ4zxPoq75J7xJEXQR81e/YVoFyeNgzBznUhcQORg==",
   "success": true,
-  "projectFilePath": "C:\\IoT\\Monitoring plants\\command\\command.csproj",
+  "projectFilePath": "C:\\Users\\MICE\\Documents\\GitHub\\AirMonitoringIoT\\command\\command.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\DJ\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
-    "C:\\Users\\DJ\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.1.2\\microsoft.aspnetcore.app.ref.3.1.2.nupkg.sha512"
+    "C:\\Users\\MICE\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512"
   ],
   "logs": []
 }
