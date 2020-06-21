@@ -48,16 +48,16 @@ services:
       SERVICES: device
     depends_on:
       - nats
-  grafana:
-    ports:
-      - 4200:3000
-    image: grafana/grafana:3.1.1
-    depends_on:
-      - influx
-    links:
-      - influx
-    volumes:
-      - influxdata:/var/lib/influx.db
+  # grafana:
+  #   ports:
+  #     - 4200:3000
+  #   image: grafana/grafana:3.1.1
+  #   depends_on:
+  #     - influx
+  #   links:
+  #     - influx
+  #   volumes:
+  #     - influxdata:/var/lib/influx.db
   analytics:
     build:
       context: ./analytics
@@ -70,5 +70,13 @@ services:
     image: command
     ports:
       - "5000:80"
+  dashboard:
+    build:
+      context: ./dashboard
+    ports:
+      - "4200:4200"
+    image: dashboard
+    # depends_on:
+    #   - gateway
 volumes:
   influxdata:
