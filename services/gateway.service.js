@@ -2,11 +2,13 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const request = require("request");
+const { response } = require("express");
 
 module.exports = {
   name: "gateway",
   settings: {
-    port: process.env.PORT || 3000
+    port: process.env.PORT || 3000,
   },
   methods: {
     initRoutes(app) {
@@ -22,11 +24,12 @@ module.exports = {
       app.put("/so2/cleaner/lvl", this.CleanerSO2Lvl);
       app.put("/no2/cleaner/lvl", this.CleanerNO2Lvl);
       app.put("/cleaner/all", this.CleanerAll);
+      app.get("/max_value/all", this.MaxValue);
     },
     Query(req, res) {
       return Promise.resolve()
         .then(() => {
-          return this.broker.call("data.query").then(result => {
+          return this.broker.call("data.query").then((result) => {
             console.log(result);
             res.send(result);
           });
@@ -36,7 +39,7 @@ module.exports = {
     getStats(req, res) {
       return Promise.resolve()
         .then(() => {
-          return this.broker.call("device.getStats").then(result => {
+          return this.broker.call("device.getStats").then((result) => {
             console.log(result);
             res.send(result);
           });
@@ -52,7 +55,7 @@ module.exports = {
         .then(() => {
           return this.broker
             .call("data.readCO", { sensorId: sensorId })
-            .then(result => {
+            .then((result) => {
               res.send(result);
             });
         })
@@ -67,7 +70,7 @@ module.exports = {
         .then(() => {
           return this.broker
             .call("data.readSO2", { sensorId: sensorId })
-            .then(result => {
+            .then((result) => {
               res.send(result);
             });
         })
@@ -82,7 +85,7 @@ module.exports = {
         .then(() => {
           return this.broker
             .call("data.readNO2", { sensorId: sensorId })
-            .then(result => {
+            .then((result) => {
               res.send(result);
             });
         })
@@ -131,11 +134,22 @@ module.exports = {
       this.broker.emit("device.changeCOCleanerLvl", data);
       res.send({ message: "successfull" });
     },
+    MaxValue() {
+      request.get(process.env.ANALYTICS_URL, (err, res, body) => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        console.log(body);
+        response.send(body);
+      });
+    },
+
     handleErr(res) {
-      return err => {
+      return (err) => {
         res.status(err.code || 500).send(err.message);
       };
-    }
+    },
   },
   created() {
     const app = express();
@@ -144,5 +158,5 @@ module.exports = {
     app.listen(this.settings.port);
     this.initRoutes(app);
     this.app = app;
-  }
+  },
 };

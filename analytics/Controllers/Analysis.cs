@@ -23,9 +23,14 @@ namespace analytics.Controllers
         }
 
         [HttpGet]
-        public ActionResult<string> Get()
+        public IActionResult GetMax()
         {
-            return Ok("Analysis works!");
+            MaxValues max = new MaxValues();
+            max.COMaxCon = COMaxCon;
+            max.NO2MaxCon = NO2MaxCon;
+            max.SO2MaxCon = SO2MaxCon;
+            max.AQIMax = AQIMax;
+            return Ok(max);
         }
 
         [HttpPost]
