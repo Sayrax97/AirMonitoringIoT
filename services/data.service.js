@@ -53,6 +53,22 @@ module.exports = {
           return null;
         }
       }
+    },
+    query: {
+      params: {
+        // sensorId: { type: "number" }
+        query: { type: "string" }
+      },
+      async handler(ctx) {
+        console.log(ctx.params.query);
+        try {
+          const res = await this.influx.query(ctx.params.query);
+          return res;
+        } catch (err) {
+          console.log(err);
+          return null;
+        }
+      }
     }
   },
   methods: {

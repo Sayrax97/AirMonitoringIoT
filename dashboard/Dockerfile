@@ -1,8 +1,11 @@
-FROM node:latest
-RUN mkdir /app
+FROM node:latest as build-step
 WORKDIR /app
-COPY package*.json /app/
-RUN npm install -g @angular/cli @angular-devkit/build-angular && npm install
-COPY ./ /app/
-EXPOSE 4200
-CMD ["npm", "start"]
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+FROM nginx:1.16.0-alpine as prod-stage
+COPY --from=build-step /app/dist/dashboard /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

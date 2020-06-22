@@ -74,7 +74,7 @@ services:
     build:
       context: ./dashboard
     ports:
-      - "4200:4200"
+      - "4200:80"
     image: dashboard
     # depends_on:
     #   - gateway

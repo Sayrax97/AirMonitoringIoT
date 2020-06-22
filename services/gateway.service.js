@@ -14,6 +14,7 @@ module.exports = {
       app.get("/co/:id", this.getCO);
       app.get("/so2/:id", this.getSO2);
       app.get("/no2/:id", this.getNO2);
+      app.post("/co/:id/query", this.Query);
       app.put("/co/cleaner", this.CleanerCO);
       app.put("/so2/cleaner", this.CleanerSO2);
       app.put("/no2/cleaner", this.CleanerNO2);
@@ -21,6 +22,16 @@ module.exports = {
       app.put("/so2/cleaner/lvl", this.CleanerSO2Lvl);
       app.put("/no2/cleaner/lvl", this.CleanerNO2Lvl);
       app.put("/cleaner/all", this.CleanerAll);
+    },
+    Query(req, res) {
+      return Promise.resolve()
+        .then(() => {
+          return this.broker.call("data.query").then(result => {
+            console.log(result);
+            res.send(result);
+          });
+        })
+        .catch(this.handleErr(res));
     },
     getStats(req, res) {
       return Promise.resolve()
