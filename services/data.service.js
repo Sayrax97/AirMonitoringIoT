@@ -54,6 +54,48 @@ module.exports = {
         }
       },
     },
+    readCOSp: {
+      params: {
+        sensorId: { type: "number" },
+      },
+      async handler(ctx) {
+        try {
+          const res = await this.influx.query(
+            `SELECT * FROM co GROUP BY * ORDER BY DESC LIMIT 1`
+          );
+          return res;
+        } catch (err) {
+          console.log(err);
+          return null;
+        }
+      },
+    },
+    readNO2: {
+      async handler(ctx) {
+        try {
+          const res = await this.influx.query(
+            `SELECT * FROM no2 GROUP BY * ORDER BY DESC LIMIT 1`
+          );
+          return res;
+        } catch (err) {
+          console.log(err);
+          return null;
+        }
+      },
+    },
+    readSO2: {
+      async handler(ctx) {
+        try {
+          const res = await this.influx.query(
+            `SELECT * FROM so2 GROUP BY * ORDER BY DESC LIMIT 1`
+          );
+          return res;
+        } catch (err) {
+          console.log(err);
+          return null;
+        }
+      },
+    },
     query: {
       params: {
         // sensorId: { type: "number" }

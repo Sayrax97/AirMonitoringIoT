@@ -3,7 +3,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const request = require("request");
-const { response } = require("express");
+const cors = require("cors");
 
 module.exports = {
   name: "gateway",
@@ -16,6 +16,9 @@ module.exports = {
       app.get("/co/:id", this.getCO);
       app.get("/so2/:id", this.getSO2);
       app.get("/no2/:id", this.getNO2);
+      app.get("/co/new/:id", this.getCOSp);
+      app.get("/so2/new/:id", this.getSO2Sp);
+      app.get("/no2/new/:id", this.getNO2Sp);
       app.post("/co/:id/query", this.Query);
       app.put("/co/cleaner", this.CleanerCO);
       app.put("/so2/cleaner", this.CleanerSO2);
@@ -91,6 +94,39 @@ module.exports = {
         })
         .catch(this.handleErr(res));
     },
+    getCOSp(req, res) {
+      const sensorId = req.params.id ? Number(req.params.id) : 0;
+      if (sensorId == 0) {
+        res.send({ error: "Id not specified" });
+      }
+      return Promise.resolve()
+        .then(() => {
+          return this.broker
+            .call("data.readCOSp", { sensorId: sensorId })
+            .then((result) => {
+              res.send(result);
+            });
+        })
+        .catch(this.handleErr(res));
+    },
+    getSO2Sp(req, res) {
+      return Promise.resolve()
+        .then(() => {
+          return this.broker.call("data.readSO2Sp", 1).then((result) => {
+            res.send(result);
+          });
+        })
+        .catch(this.handleErr(res));
+    },
+    getNO2Sp(req, res) {
+      return Promise.resolve()
+        .then(() => {
+          return this.broker.call("data.readNO2Sp", 1).then((result) => {
+            res.send(result);
+          });
+        })
+        .catch(this.handleErr(res));
+    },
     CleanerCO(req, res) {
       let data = req.body;
       if (data.Switch) this.broker.emit("device.turnCOCleanerOn");
@@ -134,14 +170,14 @@ module.exports = {
       this.broker.emit("device.changeCOCleanerLvl", data);
       res.send({ message: "successfull" });
     },
-    MaxValue() {
-      request.get(process.env.ANALYTICS_URL, (err, res, body) => {
+    MaxValue(req, res) {
+      request.get(process.env.ANALYTICS_URL, (err, res1, body) => {
         if (err) {
           console.log(err);
           return;
         }
         console.log(body);
-        response.send(body);
+        res.send(body);
       });
     },
 
@@ -155,6 +191,7 @@ module.exports = {
     const app = express();
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
+    app.use(cors());
     app.listen(this.settings.port);
     this.initRoutes(app);
     this.app = app;
