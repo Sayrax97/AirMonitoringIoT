@@ -110,20 +110,32 @@ module.exports = {
         .catch(this.handleErr(res));
     },
     getSO2Sp(req, res) {
+      const sensorId = req.params.id ? Number(req.params.id) : 0;
+      if (sensorId == 0) {
+        res.send({ error: "Id not specified" });
+      }
       return Promise.resolve()
         .then(() => {
-          return this.broker.call("data.readSO2Sp", 1).then((result) => {
-            res.send(result);
-          });
+          return this.broker
+            .call("data.readSO2Sp", { sensorId: sensorId })
+            .then((result) => {
+              res.send(result);
+            });
         })
         .catch(this.handleErr(res));
     },
     getNO2Sp(req, res) {
+      const sensorId = req.params.id ? Number(req.params.id) : 0;
+      if (sensorId == 0) {
+        res.send({ error: "Id not specified" });
+      }
       return Promise.resolve()
         .then(() => {
-          return this.broker.call("data.readNO2Sp", 1).then((result) => {
-            res.send(result);
-          });
+          return this.broker
+            .call("data.readNO2Sp", { sensorId: sensorId })
+            .then((result) => {
+              res.send(result);
+            });
         })
         .catch(this.handleErr(res));
     },

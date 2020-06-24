@@ -71,6 +71,9 @@ module.exports = {
       },
     },
     readNO2: {
+      params: {
+        sensorId: { type: "number" },
+      },
       async handler(ctx) {
         try {
           const res = await this.influx.query(
@@ -84,6 +87,9 @@ module.exports = {
       },
     },
     readSO2: {
+      params: {
+        sensorId: { type: "number" },
+      },
       async handler(ctx) {
         try {
           const res = await this.influx.query(
