@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 
 @Injectable({
-  providedIn: "root",
+  providedIn: "root"
 })
 export class GatewayService {
   url = "http://localhost:3000/";
@@ -18,13 +18,13 @@ export class GatewayService {
   getSO2(id: number) {
     return this.httpClint.get<any>(this.url + `so2/${id}`);
   }
-  getCO(id: number) {
+  getCOnew(id: number) {
     return this.httpClint.get<any>(this.url + `co/new`);
   }
-  getNO2(id: number) {
+  getNO2new(id: number) {
     return this.httpClint.get<any>(this.url + `no2/new`);
   }
-  getSO2(id: number) {
+  getSO2new(id: number) {
     return this.httpClint.get<any>(this.url + `so2/new`);
   }
   getStats() {
