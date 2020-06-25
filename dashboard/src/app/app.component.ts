@@ -5,6 +5,8 @@ import { Stats } from "./Models/Stats";
 import { GatewayService } from "./../service/gateway.service";
 import { Component, OnInit } from "@angular/core";
 import { SO2 } from "./Models/SO2";
+import * as CanvasJS from "../assets/canvasjs.min";
+import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 
 @Component({
   selector: "app-root",
@@ -21,86 +23,138 @@ export class AppComponent implements OnInit {
   so2Sp: SO2;
   no2Sp: NO2;
   maxValue: MaxValue;
-  constructor(private gServices: GatewayService) {}
+  dataPointsCO = [];
+  dataPointsSO2 = [];
+  dataPointsNO2 = [];
+  dataPointsCOAQI = [];
+  dataPointsSO2AQI = [];
+  dataPointsNO2AQI = [];
+  dpsLength: number;
+  constructor(private gServices: GatewayService) {
+    this.dpsLength = 0;
+  }
 
   ngOnInit(): void {
-    this.gServices.getStats().subscribe((res) => {
-      this.stats = res;
-
-      this.gServices.getCO(this.stats.sendorID).subscribe((res) => {
-        this.co = res;
-      });
-      this.gServices.getNO2(this.stats.sendorID).subscribe((res) => {
-        this.so2 = res;
-      });
-      this.gServices.getSO2(this.stats.sendorID).subscribe((res) => {
-        this.no2 = res;
-      });
-      this.gServices.getCOSp(this.stats.sendorID).subscribe((res) => {
-        this.coSp = res;
-      });
-      this.gServices.getNO2Sp(this.stats.sendorID).subscribe((res) => {
-        this.so2Sp = res;
-      });
-      this.gServices.getSO2Sp(this.stats.sendorID).subscribe((res) => {
-        this.no2Sp = res;
-      });
-    });
-    this.gServices.getMaxValue().subscribe((res) => {
-      this.maxValue = res;
-    });
-
-    let dataPoints = [];
     let dpsLength = 0;
-    let chart = new CanvasJS.Chart("chartContainer", {
-      exportEnabled: true,
+    let chartNO2 = new CanvasJS.Chart("chartNO2", {
+      //exportEnabled: true,
       title: {
-        text: "Live Chart with Data-Points from External JSON",
+        text: "NO2",
       },
       data: [
         {
           type: "spline",
-          dataPoints: dataPoints,
+          dataPoints: this.dataPointsNO2,
+        },
+        {
+          type: "line",
+          dataPoints: this.dataPointsNO2AQI,
+        },
+      ],
+    });
+    let chartCO = new CanvasJS.Chart("chartCO", {
+      //exportEnabled: true,
+      title: {
+        text: "CO",
+      },
+      data: [
+        {
+          type: "spline",
+          dataPoints: this.dataPointsCO,
+        },
+        {
+          type: "line",
+          dataPoints: this.dataPointsCOAQI,
+        },
+      ],
+    });
+    let chartSO2 = new CanvasJS.Chart("chartSO2", {
+      //exportEnabled: true,
+      title: {
+        text: "SO2",
+      },
+      data: [
+        {
+          type: "spline",
+          dataPoints: this.dataPointsSO2,
+        },
+        {
+          type: "line",
+          dataPoints: this.dataPointsSO2AQI,
         },
       ],
     });
 
-    $.getJSON(
-      "https://canvasjs.com/services/data/datapoints.php?xstart=1&ystart=25&length=20&type=json&callback=?",
-      function (data) {
-        $.each(data, function (key, value) {
-          dataPoints.push({ x: value[0], y: parseInt(value[1]) });
-        });
-        dpsLength = dataPoints.length;
-        chart.render();
-        updateChart();
-      }
-    );
-    function updateChart() {
-      $.getJSON(
-        "https://canvasjs.com/services/data/datapoints.php?xstart=" +
-          (dpsLength + 1) +
-          "&ystart=" +
-          dataPoints[dataPoints.length - 1].y +
-          "&length=1&type=json&callback=?",
-        function (data) {
-          $.each(data, function (key, value) {
-            dataPoints.push({
-              x: parseInt(value[0]),
-              y: parseInt(value[1]),
-            });
-            dpsLength++;
-          });
+    this.gServices.getStats().subscribe((res) => {
+      this.stats = res;
+      this.updateChart(this.stats.sendorID, chartCO, chartSO2, chartNO2);
+    });
+    this.gServices.getMaxValue().subscribe((res) => {
+      this.maxValue = res[0];
+    });
+  }
 
-          if (dataPoints.length > 20) {
-            dataPoints.shift();
-          }
-          chart.render();
-          setTimeout(function () {
-            updateChart();
-          }, 1000);
-        }
-      );
-    }
+  updateChart(
+    id: number,
+    chart1: CanvasJS.Chart,
+    chart2: CanvasJS.Chart,
+    chart3: CanvasJS.Chart
+  ) {
+    let that = this;
+    this.gServices.getSO2Sp(this.stats.sendorID).subscribe((res) => {
+      this.so2Sp = res[0];
+      this.dataPointsSO2.push({
+        x: this.dataPointsSO2.length,
+        y: this.so2Sp.SO2_Con,
+      });
+      this.dataPointsSO2AQI.push({
+        x: this.dataPointsSO2AQI.length,
+        y: this.so2Sp.SO2_AQI,
+      });
+      //console.log(this.so2Sp.SO2_Con);
+      if (this.dataPointsSO2.length > 20) {
+        this.dataPointsSO2.shift();
+        this.dataPointsSO2AQI.shift();
+      }
+      chart1.render();
+    });
+    this.gServices.getCOSp(this.stats.sendorID).subscribe((res) => {
+      this.coSp = res[0];
+      this.dataPointsCO.push({
+        x: this.dataPointsCO.length,
+        y: this.coSp.CO_Con,
+      });
+      this.dataPointsCOAQI.push({
+        x: this.dataPointsCOAQI.length,
+        y: this.coSp.CO_AQI,
+      });
+
+      if (this.dataPointsCO.length > 20) {
+        this.dataPointsCO.shift();
+        this.dataPointsCOAQI.shift();
+      }
+      chart2.render();
+    });
+    this.gServices.getNO2Sp(this.stats.sendorID).subscribe((res) => {
+      this.no2Sp = res[0];
+      this.dataPointsNO2.push({
+        x: this.dataPointsNO2.length,
+        y: this.no2Sp.NO2_Con,
+      });
+      this.dataPointsNO2AQI.push({
+        x: this.dataPointsNO2AQI.length,
+        y: this.no2Sp.NO2_AQI,
+      });
+      //console.log(this.no2Sp.NO2_Con);
+      if (this.dataPointsNO2.length > 20) {
+        this.dataPointsNO2.shift();
+        this.dataPointsNO2AQI.shift();
+      }
+      chart3.render();
+    });
+
+    setTimeout(function () {
+      that.updateChart(id, chart1, chart2, chart3);
+    }, 5000);
   }
 }
