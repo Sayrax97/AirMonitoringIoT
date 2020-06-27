@@ -41,6 +41,15 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     let dpsLength = 0;
+    this.socket.fromEvent("new.data").subscribe(data => {
+      console.log(data);
+    });
+    this.socket.fromEvent("warning").subscribe(data => {
+      console.log(data);
+    });
+    this.socket.fromEvent("actuator").subscribe(data => {
+      console.log(data);
+    });
     let chartNO2 = new CanvasJS.Chart("chartNO2", {
       //exportEnabled: true,
       title: {
@@ -115,15 +124,6 @@ export class AppComponent implements OnInit {
         "CleanerCOLvl"
       ).innerHTML = this.stats.CleanerCOLvl.toString();
 
-      this.socket.fromEvent("new.data").subscribe(data => {
-        console.log(data);
-      });
-      this.socket.fromEvent("warning").subscribe(data => {
-        console.log(data);
-      });
-      this.socket.fromEvent("actuator").subscribe(data => {
-        console.log(data);
-      });
       // this.gServices.getStats().subscribe(res => {
       //   this.stats = res;
       if (this.stats.CleanerNO2)
