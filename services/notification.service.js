@@ -13,23 +13,6 @@ module.exports = {
       this.io.emit("new.data", "new data added");
     }
   },
-  methods: {
-    getStats(req, res) {
-      return Promise.resolve()
-        .then(() => {
-          return this.broker.call("device.getStats").then(result => {
-            console.log(result);
-            res.send(result);
-          });
-        })
-        .catch(this.handleErr(res));
-    },
-    handleErr(res) {
-      return err => {
-        res.status(err.code || 500).send(err.message);
-      };
-    }
-  },
   created() {
     const app = express();
     app.use(cors());

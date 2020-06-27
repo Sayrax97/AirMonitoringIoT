@@ -9,6 +9,8 @@ import * as CanvasJS from "../assets/canvasjs.min";
 import { Socket } from "ngx-socket-io";
 import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 
+//GET za dobijanje liste komandi i njenih parametara
+
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
@@ -41,15 +43,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     let dpsLength = 0;
-    this.socket.fromEvent("new.data").subscribe(data => {
-      console.log(data);
-    });
-    this.socket.fromEvent("warning").subscribe(data => {
-      console.log(data);
-    });
-    this.socket.fromEvent("actuator").subscribe(data => {
-      console.log(data);
-    });
+    this.gServices.getStats().subscribe(res => {
+      this.stats = res;
+    })
     let chartNO2 = new CanvasJS.Chart("chartNO2", {
       //exportEnabled: true,
       title: {
@@ -98,10 +94,22 @@ export class AppComponent implements OnInit {
         }
       ]
     });
-    this.updateChart(chartCO, chartSO2, chartNO2);
-    this.gServices.getMaxValue().subscribe(res => {
-      this.maxValue = res[0];
+
+    this.socket.fromEvent("new.data").subscribe(data => {
+      this.updateChart(chartCO, chartSO2, chartNO2);
     });
+    this.socket.fromEvent("warning").subscribe(data => {
+      console.log(data);
+    });
+    this.socket.fromEvent("actuator").subscribe(data => {
+      this.gServices.getStats().subscribe(res => {
+      this.stats = res;
+    })
+    });
+    // this.updateChart(chartCO, chartSO2, chartNO2);
+    // this.gServices.getMaxValue().subscribe(res => {
+    //   this.maxValue = res[0];
+    // });
   }
 
   updateChart(
@@ -110,36 +118,6 @@ export class AppComponent implements OnInit {
     chart3: CanvasJS.Chart
   ) {
     let that = this;
-    this.gServices.getStats().subscribe(res => {
-      this.stats = res;
-
-      document.getElementById(
-        "senzorID"
-      ).innerHTML = this.stats.sendorID.toString();
-
-      if (this.stats.CleanerCO)
-        document.getElementById("CleanerCO").innerHTML = "On";
-      else document.getElementById("CleanerCO").innerHTML = "Off";
-      document.getElementById(
-        "CleanerCOLvl"
-      ).innerHTML = this.stats.CleanerCOLvl.toString();
-
-      // this.gServices.getStats().subscribe(res => {
-      //   this.stats = res;
-      if (this.stats.CleanerNO2)
-        document.getElementById("CleanerNO2").innerHTML = "On";
-      else document.getElementById("CleanerNO2").innerHTML = "Off";
-      document.getElementById(
-        "CleanerNO2Lvl"
-      ).innerHTML = this.stats.CleanerNO2Lvl.toString();
-
-      if (this.stats.CleanerSO2)
-        document.getElementById("CleanerSO2").innerHTML = "On";
-      else document.getElementById("CleanerSO2").innerHTML = "Off";
-      document.getElementById(
-        "CleanerSO2Lvl"
-      ).innerHTML = this.stats.CleanerSO2Lvl.toString();
-
       this.gServices.getSO2Sp(this.stats.sendorID).subscribe(res => {
         this.so2Sp = res[0];
         this.dataPointsSO2.push({
@@ -155,7 +133,7 @@ export class AppComponent implements OnInit {
           this.dataPointsSO2.shift();
           this.dataPointsSO2AQI.shift();
         }
-        chart1.render();
+        chart2.render();
       });
       this.gServices.getCOSp(this.stats.sendorID).subscribe(res => {
         this.coSp = res[0];
@@ -172,7 +150,7 @@ export class AppComponent implements OnInit {
           this.dataPointsCO.shift();
           this.dataPointsCOAQI.shift();
         }
-        chart2.render();
+        chart1.render();
       });
       this.gServices.getNO2Sp(this.stats.sendorID).subscribe(res => {
         this.no2Sp = res[0];
@@ -191,12 +169,9 @@ export class AppComponent implements OnInit {
         }
         chart3.render();
       });
-    });
     this.dpsLengthCO++;
     this.dpsLengthNO2++;
     this.dpsLengthSO2++;
-    setTimeout(function() {
-      that.updateChart(chart1, chart2, chart3);
-    }, 5000);
+    
   }
 }

@@ -14,6 +14,7 @@ namespace analytics.Controllers
     [Route("/api/[controller]")]
     public class AnalysisController : ControllerBase
     {
+        //Promena ovih parametara
         private static readonly double COMaxCon = 0.8;
         private static readonly double NO2MaxCon = 40;
         private static readonly double SO2MaxCon = 2;

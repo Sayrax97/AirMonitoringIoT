@@ -1,37 +1,40 @@
-<div>
+<div *ngIf="stats">
   <label>Sensor id: </label>
-  <label id="senzorID"></label>
+  <label >{{stats.sendorID}}</label>
 </div>
-<div class="container">
+<div *ngIf="stats" class="container">
   <div class="row">
     <div class="col-sm">
       <div>
         <label>CO Cleaner: </label>
-        <label id="CleanerCO"></label>
+        <label *ngIf="stats.CleanerCO">On</label>
+        <label *ngIf="!stats.CleanerCO">Off</label>
       </div>
       <div>
         <label>CO Cleaner LVL:</label>
-        <label id="CleanerCOLvl"></label>
+        <label>{{stats.CleanerCOLvl}}</label>
       </div>
     </div>
     <div class="col-sm">
       <div>
         <label>SO2 Cleaner: </label>
-        <label id="CleanerSO2"></label>
+        <label *ngIf="stats.CleanerSO2">On</label>
+        <label *ngIf="!stats.CleanerSO2">Off</label>
       </div>
       <div>
-        <label>SO2 Cleaner LVL: </label>
-        <label id="CleanerSO2Lvl"></label>
+        <label>SO2 Cleaner LVL:</label>
+        <label>{{stats.CleanerSO2Lvl}}</label>
       </div>
     </div>
     <div class="col-sm">
       <div>
         <label>NO2 Cleaner: </label>
-        <label id="CleanerNO2"></label>
+        <label *ngIf="stats.CleanerNO2">On</label>
+        <label *ngIf="!stats.CleanerNO2">Off</label>
       </div>
       <div>
-        <label>NO2 Cleaner LVL: </label>
-        <label id="CleanerNO2Lvl"></label>
+        <label>NO2 Cleaner LVL:</label>
+        <label>{{stats.CleanerNO2Lvl}}</label>
       </div>
     </div>
   </div>
