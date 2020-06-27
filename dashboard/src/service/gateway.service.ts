@@ -8,7 +8,7 @@ export class GatewayService {
   url = "http://localhost:3000/";
 
   constructor(private httpClint: HttpClient) {}
-
+  getIO() {}
   getCO(id: number) {
     return this.httpClint.get<any>(this.url + `co/${id}`);
   }

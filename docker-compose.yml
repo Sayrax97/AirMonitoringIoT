@@ -10,6 +10,12 @@ services:
       - "8086:8086"
   nats:
     image: nats:latest
+    expose:
+      - "4222"
+      - "6222"
+    ports:
+      - "4222:4222"
+      - "6222:6222"
   gateway:
     build:
       context: .
@@ -48,16 +54,20 @@ services:
       SERVICES: device
     depends_on:
       - nats
-  # grafana:
-  #   ports:
-  #     - 4200:3000
-  #   image: grafana/grafana:3.1.1
-  #   depends_on:
-  #     - influx
-  #   links:
-  #     - influx
-  #   volumes:
-  #     - influxdata:/var/lib/influx.db
+  notification:
+    build:
+      context: .
+    env_file: docker-compose.env
+    environment:
+      NODEID: "node-notification"
+      SERVICES: notification
+    depends_on:
+      - nats
+      - analytics
+      - data
+    ports:
+      - "3002:3002"
+      - "3001:3001"
   analytics:
     build:
       context: ./analytics
@@ -76,7 +86,11 @@ services:
   #   ports:
   #     - "4200:80"
   #   image: dashboard
-  #   # depends_on:
-  #   #   - gateway
+  #   depends_on:
+  #     - nats
+  #     - gateway
+  #     - notification
+  #     - analytics
+  #     - influx
 volumes:
   influxdata:

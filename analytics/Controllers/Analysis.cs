@@ -49,7 +49,12 @@ namespace analytics.Controllers
                     actuator.Lvl = x;
                     var c = JsonConvert.SerializeObject(actuator);
                     StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
-                    System.Console.WriteLine("Too much CO in air");
+                    Warning warning=new Warning() { 
+                    Text= "Too much CO in air"
+                    };
+                    System.Console.WriteLine(warning.Text);
+                    StringContent warningContent=new StringContent(JsonConvert.SerializeObject(warning),Encoding.UTF8,"application/json");
+                    await httpClient.PostAsync("http://notification:3001/publish",warningContent);
                     using (var response = await httpClient.PutAsync("http://command/api/Command/co/cleaner", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
@@ -87,7 +92,13 @@ namespace analytics.Controllers
                     actuator.Lvl = x;
                     var c = JsonConvert.SerializeObject(actuator);
                     StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
-                    System.Console.WriteLine("Too much SO2 in air");
+                    Warning warning=new Warning()
+                    {
+                        Text= "Too much SO2 in air"
+                    };
+                    System.Console.WriteLine(warning.Text);
+                    StringContent warningContent=new StringContent(JsonConvert.SerializeObject(warning),Encoding.UTF8,"application/json");
+                    await httpClient.PostAsync("http://notification:3001/publish",warningContent);
                     using (var response = await httpClient.PutAsync("http://command/api/Command/so2/cleaner", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
@@ -125,7 +136,13 @@ namespace analytics.Controllers
                     actuator.Lvl = x;
                     var c = JsonConvert.SerializeObject(actuator);
                     StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
-                    System.Console.WriteLine("Too much NO2 in air");
+                    Warning warning=new Warning() 
+                    {
+                        Text= "Too much NO2 in air"
+                    };
+                    System.Console.WriteLine(warning.Text);
+                    StringContent warningContent=new StringContent(JsonConvert.SerializeObject(warning),Encoding.UTF8,"application/json");
+                    await httpClient.PostAsync("http://notification:3001/publish", warningContent);
                     using (var response = await httpClient.PutAsync("http://command/api/Command/no2/cleaner", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
@@ -162,12 +179,27 @@ namespace analytics.Controllers
                     actuator.Lvl = x;
                     var c = JsonConvert.SerializeObject(actuator);
                     StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
-                    System.Console.WriteLine("Too much air pollution AQI is high");
+                    Warning warning=new Warning()
+                    {
+                        Text= "Too much air pollution AQI is high"
+                    };
+                    System.Console.WriteLine(warning.Text);
+                    StringContent warningContent=new StringContent(JsonConvert.SerializeObject(warning), Encoding.UTF8,"application/json");
+                    await httpClient.PostAsync("http://notification:3001/publish", warningContent);
                     using (var response = await httpClient.PutAsync("http://command/api/Command/cleaner/all", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
                     }
                 }
+            }
+
+            using (var httpClient = new HttpClient()){
+                Warning warning=new Warning()
+                {
+                    Text= "Actuators changed"
+                };
+                StringContent warningContent=new StringContent(JsonConvert.SerializeObject(warning), Encoding.UTF8,"application/json");
+                await httpClient.PostAsync("http://notification:3001/actuator",warningContent);
             }
             return new JsonResult(
                 new

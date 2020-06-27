@@ -6,6 +6,7 @@ import { GatewayService } from "./../service/gateway.service";
 import { Component, OnInit } from "@angular/core";
 import { SO2 } from "./Models/SO2";
 import * as CanvasJS from "../assets/canvasjs.min";
+import { Socket } from "ngx-socket-io";
 
 @Component({
   selector: "app-root",
@@ -19,7 +20,7 @@ export class AppComponent implements OnInit {
   so2: SO2;
   no2: NO2;
   maxValue: MaxValue;
-  constructor(private gServices: GatewayService) {}
+  constructor(private gServices: GatewayService, private socket: Socket) {}
 
   ngOnInit(): void {
     let chart = new CanvasJS.Chart("chartContainer", {
@@ -47,6 +48,16 @@ export class AppComponent implements OnInit {
     });
 
     chart.render();
+
+    this.socket.fromEvent("new.data").subscribe(data => {
+      console.log(data);
+    });
+    this.socket.fromEvent("warning").subscribe(data => {
+      console.log(data);
+    });
+    this.socket.fromEvent("actuator").subscribe(data => {
+      console.log(data);
+    });
     // this.gServices.getStats().subscribe(res => {
     //   this.stats = res;
 
