@@ -70,7 +70,7 @@ module.exports = {
         }
       }
     },
-    readNO2: {
+    readNO2Sp: {
       params: {
         sensorId: { type: "number" }
       },
@@ -86,7 +86,7 @@ module.exports = {
         }
       }
     },
-    readSO2: {
+    readSO2Sp: {
       params: {
         sensorId: { type: "number" }
       },
