@@ -20,7 +20,6 @@ module.exports = {
       app.get("/co/new/:id", this.getCOSp);
       app.get("/so2/new/:id", this.getSO2Sp);
       app.get("/no2/new/:id", this.getNO2Sp);
-      app.post("/co/:id/query", this.Query);
       app.put("/co/cleaner", this.CleanerCO);
       app.put("/so2/cleaner", this.CleanerSO2);
       app.put("/no2/cleaner", this.CleanerNO2);
@@ -29,16 +28,12 @@ module.exports = {
       app.put("/no2/cleaner/lvl", this.CleanerNO2Lvl);
       app.put("/cleaner/all", this.CleanerAll);
       app.get("/max_value/all", this.MaxValue);
+      app.put("/device/interval", this.changeInterval);
     },
-    Query(req, res) {
-      return Promise.resolve()
-        .then(() => {
-          return this.broker.call("data.query").then(result => {
-            console.log(result);
-            res.send(result);
-          });
-        })
-        .catch(this.handleErr(res));
+    changeInterval(req, res) {
+      console.log("Change interval: " + req.body);
+      this.broker.emit("device.changeInterval", req.body);
+      res.send("changed");
     },
     getStats(req, res) {
       return Promise.resolve()

@@ -31,7 +31,7 @@ module.exports = {
   },
   methods: {
     init() {
-      setInterval(() => {
+      this.intervalID = setInterval(() => {
         let recordCO = this.dataCO[this.IndexCO];
         this.IndexCO = (this.IndexCO + 1) % this.dataCO.length;
 
@@ -60,21 +60,30 @@ module.exports = {
       fs.readFile("data/co.json", (error, data) => {
         if (error) throw error;
         this.dataCO = JSON.parse(data);
-        console.log(this.dataCO.length);
       });
       fs.readFile("data/no2.json", (error, data) => {
         if (error) throw error;
         this.dataNO2 = JSON.parse(data);
-        console.log(this.dataNO2.length);
       });
       fs.readFile("data/so2.json", (error, data) => {
         if (error) throw error;
         this.dataSO2 = JSON.parse(data);
-        console.log(this.dataSO2.length);
       });
     }
   },
   events: {
+    "device.changeInterval": {
+      group: "other",
+      handler(payload) {
+        console.log(
+          'Received "changeInterval" event: with payload' +
+            JSON.stringify(payload)
+        );
+        this.interval = payload.interval;
+        clearInterval(this.intervalID);
+        this.init();
+      }
+    },
     "device.turnCOCleanerOn": {
       group: "other",
       handler(payload) {

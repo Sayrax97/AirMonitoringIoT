@@ -1,9 +1,25 @@
-<div *ngIf="stats">
-  <label>Sensor id: </label>
-  <label >{{stats.sendorID}}</label>
-</div>
-<div *ngIf="stats" class="container">
+<div *ngIf="stats" class="mb-3">
   <div class="row">
+    <div class="col-sm">
+      <div>
+        <label>Sensor id: </label>
+        <label>{{ stats.sendorID }}</label>
+      </div>
+      <div *ngIf="stats.interval">
+        <label for="interval">Interval(ms): </label>
+        <input
+          step="1000"
+          [(ngModel)]="stats.interval"
+          class="form-control"
+          type="number"
+          name="interval"
+          id="interval"
+        />
+        <button class="btn btn-primary" (click)="changeInterval()">
+          Change interval
+        </button>
+      </div>
+    </div>
     <div class="col-sm">
       <div>
         <label>CO Cleaner: </label>
@@ -12,7 +28,7 @@
       </div>
       <div>
         <label>CO Cleaner LVL:</label>
-        <label>{{stats.CleanerCOLvl}}</label>
+        <label>{{ stats.CleanerCOLvl }}</label>
       </div>
     </div>
     <div class="col-sm">
@@ -23,7 +39,7 @@
       </div>
       <div>
         <label>SO2 Cleaner LVL:</label>
-        <label>{{stats.CleanerSO2Lvl}}</label>
+        <label>{{ stats.CleanerSO2Lvl }}</label>
       </div>
     </div>
     <div class="col-sm">
@@ -34,11 +50,52 @@
       </div>
       <div>
         <label>NO2 Cleaner LVL:</label>
-        <label>{{stats.CleanerNO2Lvl}}</label>
+        <label>{{ stats.CleanerNO2Lvl }}</label>
+      </div>
+    </div>
+    <div *ngIf="aqiWarning" class="col-2 bg-danger p-2">
+      <div>
+        <label>AQI warning:{{ aqiWarning }} </label>
       </div>
     </div>
   </div>
 </div>
-<div id="chartNO2" style="width: 100%; height: 400px;"></div>
-<div id="chartCO" style="width: 100%; height: 400px;"></div>
-<div id="chartSO2" style="width: 100%; height: 400px;"></div>
+<div class="row">
+  <div class="col-10" id="chartNO2" style="width: 80%; height: 300px;"></div>
+  <div class="col-2" *ngIf="no2Sp">
+    <ul class="list-group">
+      <li class="list-group-item active">{{ no2Sp.NO2_AQS_Name }} chart</li>
+      <li class="list-group-item">NO2 concentration: {{ no2Sp.NO2_Con }}</li>
+      <li class="list-group-item">NO2 AQI: {{ no2Sp.NO2_AQI }}</li>
+      <li *ngIf="no2Warning" class="list-group-item bg-danger">
+        Warning: {{ no2Warning }}
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="col-10" id="chartCO" style="width: 80%; height: 300px;"></div>
+  <div class="col-2" *ngIf="coSp">
+    <ul class="list-group">
+      <li class="list-group-item active">{{ coSp.CO_AQS_Name }} chart</li>
+      <li class="list-group-item">CO concentration: {{ coSp.CO_Con }}</li>
+      <li class="list-group-item">CO AQI: {{ coSp.CO_AQI }}</li>
+      <li *ngIf="coWarning" class="list-group-item bg-danger">
+        Warning: {{ coWarning }}
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="col-10" id="chartSO2" style="width: 80%; height: 300px;"></div>
+  <div class="col-2" *ngIf="so2Sp">
+    <ul class="list-group">
+      <li class="list-group-item active">{{ so2Sp.SO2_AQS_Name }} chart</li>
+      <li class="list-group-item">SO2 concentration: {{ so2Sp.SO2_Con }}</li>
+      <li class="list-group-item">SO2 AQI: {{ so2Sp.SO2_AQI }}</li>
+      <li *ngIf="so2Warning" class="list-group-item bg-danger">
+        Warning: {{ so2Warning }}
+      </li>
+    </ul>
+  </div>
+</div>

@@ -55,7 +55,7 @@ namespace analytics.Controllers
                     };
                     System.Console.WriteLine(warning.Text);
                     StringContent warningContent=new StringContent(JsonConvert.SerializeObject(warning),Encoding.UTF8,"application/json");
-                    await httpClient.PostAsync("http://notification:3001/publish",warningContent);
+                    await httpClient.PostAsync("http://notification:3001/publish/co",warningContent);
                     using (var response = await httpClient.PutAsync("http://command/api/Command/co/cleaner", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
@@ -99,7 +99,7 @@ namespace analytics.Controllers
                     };
                     System.Console.WriteLine(warning.Text);
                     StringContent warningContent=new StringContent(JsonConvert.SerializeObject(warning),Encoding.UTF8,"application/json");
-                    await httpClient.PostAsync("http://notification:3001/publish",warningContent);
+                    await httpClient.PostAsync("http://notification:3001/publish/so2",warningContent);
                     using (var response = await httpClient.PutAsync("http://command/api/Command/so2/cleaner", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
@@ -143,7 +143,7 @@ namespace analytics.Controllers
                     };
                     System.Console.WriteLine(warning.Text);
                     StringContent warningContent=new StringContent(JsonConvert.SerializeObject(warning),Encoding.UTF8,"application/json");
-                    await httpClient.PostAsync("http://notification:3001/publish", warningContent);
+                    await httpClient.PostAsync("http://notification:3001/publish/no2", warningContent);
                     using (var response = await httpClient.PutAsync("http://command/api/Command/no2/cleaner", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
@@ -186,12 +186,23 @@ namespace analytics.Controllers
                     };
                     System.Console.WriteLine(warning.Text);
                     StringContent warningContent=new StringContent(JsonConvert.SerializeObject(warning), Encoding.UTF8,"application/json");
-                    await httpClient.PostAsync("http://notification:3001/publish", warningContent);
+                    await httpClient.PostAsync("http://notification:3001/publish/aqi", warningContent);
                     using (var response = await httpClient.PutAsync("http://command/api/Command/cleaner/all", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
                     }
                 }
+            }
+            else{
+               using (var httpClient = new HttpClient())
+                {
+                    Warning warning=new Warning()
+                    {
+                        Text= "AQI low"
+                    };
+                    StringContent warningContent=new StringContent(JsonConvert.SerializeObject(warning), Encoding.UTF8,"application/json");
+                    await httpClient.PostAsync("http://notification:3001/publish/aqilow", warningContent);
+                } 
             }
 
             using (var httpClient = new HttpClient()){

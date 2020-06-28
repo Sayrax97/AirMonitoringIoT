@@ -2,13 +2,15 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 
 @Injectable({
-  providedIn: "root",
+  providedIn: "root"
 })
 export class GatewayService {
   url = "http://localhost:3000/";
 
   constructor(private httpClint: HttpClient) {}
-  getIO() {}
+  changeInterval(interval: number) {
+    return this.httpClint.put<any>(this.url + `device/interval`, { interval });
+  }
   getCO(id: number) {
     return this.httpClint.get<any>(this.url + `co/${id}`);
   }
